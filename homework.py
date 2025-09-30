@@ -8,7 +8,7 @@ def test_dark_theme_by_time():
     current_time = time(hour=23)
     # TODO переключите темную тему в зависимости от времени суток (с 22 до 6 часов утра - ночь)
 
-    is_dark_theme = True if (current_time <= time(hour=6) or current_time >= (time(hour=22))) else False
+    is_dark_theme = True if (current_time < time(hour=6) or current_time >= (time(hour=22))) else False
 
     assert is_dark_theme is True
 
@@ -29,7 +29,7 @@ def test_dark_theme_by_time_and_user_choice():
     if dark_theme_enabled_by_user is not None:
         is_dark_theme = dark_theme_enabled_by_user
     else:
-        is_dark_theme = True if (current_time <= time(hour=6) or current_time >= (time(hour=22))) else False
+        is_dark_theme = True if (current_time < time(hour=6) or current_time >= (time(hour=22))) else False
 
     assert is_dark_theme is True
 
@@ -77,6 +77,10 @@ def test_find_suitable_user():
 # >>> open_browser(browser_name="Chrome")
 # "Open Browser [Chrome]"
 
+def print_readable_function(func, *args):
+    readable_function_data = f'{func.__name__.replace("_", " ").title()} [{", ".join([*args])}]'
+    print(readable_function_data)
+    return readable_function_data
 
 def test_readable_function():
     open_browser(browser_name="Chrome")
@@ -85,20 +89,16 @@ def test_readable_function():
 
 
 def open_browser(browser_name):
-    current_string = ' '.join(open_browser.__name__.split('_')).capitalize()
-    actual_result = f'{current_string} [{browser_name}]'
-    assert actual_result == "Open browser [Chrome]" # допустимо сделать заглавной только первую букву, поэтому изменила проверку
+    actual_result = print_readable_function(open_browser, browser_name)
+    assert actual_result == "Open Browser [Chrome]"
 
 
 def go_to_companyname_homepage(page_url):
-    func_name_list = [item.capitalize() for item in go_to_companyname_homepage.__name__.split('_')]
-    func_name_string = ' '.join(func_name_list)
-    actual_result = f'{func_name_string} [{page_url}]'
+    actual_result = print_readable_function(go_to_companyname_homepage, page_url)
     assert actual_result == "Go To Companyname Homepage [https://companyname.com]"
 
 
 def find_registration_button_on_login_page(page_url, button_text):
-    func_name_list = [item.capitalize() for item in find_registration_button_on_login_page.__name__.split('_')]
-    func_name_string = ' '.join(func_name_list)
-    actual_result = f'{func_name_string} [{page_url}, {button_text}]'
+    actual_result = print_readable_function(find_registration_button_on_login_page, page_url, button_text)
     assert actual_result == "Find Registration Button On Login Page [https://companyname.com/login, Register]"
+
